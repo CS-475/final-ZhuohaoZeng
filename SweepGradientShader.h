@@ -4,16 +4,22 @@
 #include "include/GPoint.h"
 #include "utils.h"
 
-class MyShaderS: public GShader {
+class SweepGradientShader: public GShader {
 private:
+    std::vector<GColor> myColors;
+    int myCount;
     GMatrix invTransform;
     GMatrix M;
 public:
-    MyShaderS(GMatrix m){
+    SweepGradientShader(GPoint center, float startRadians, const GColor colors[], int count, GMatrix m){
+        myCount = count;
         M = m;
+        for(int i = 0; i < count; i++) {
+            myColors.push_back(colors[i]);
+        }
     };
     bool isOpaque() override {
-        return true;
+        return false;
     };
     
     bool setContext(const GMatrix& ctm) override {
@@ -26,9 +32,8 @@ public:
             return false;
         return false;
     };
+    
     void shadeRow(int x, int y, int count, GPixel row[]) override {
-        GPoint p_t = invTransform * GPoint{x + 0.5f, y + 0.5f};
-        float px = p_t.x;
-        float dpx = invTransform.e0().x;
-    }
+        
+    };
 };
